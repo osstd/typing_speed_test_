@@ -1,6 +1,6 @@
 import tkinter as tk
 from datetime import datetime
-
+import platform
 
 class TypingSpeedTestApp:
     def __init__(self, master):
@@ -30,6 +30,13 @@ class TypingSpeedTestApp:
         self.result_label = tk.Label(self.master, text="")
         self.result_label.pack(pady=10)
 
+        if platform.system() == 'Windows':
+            self.entry.bind('<Control-c>', self.disable_copy_paste)
+            self.entry.bind('<Control-v>', self.disable_copy_paste)
+        elif platform.system() == 'Darwin':
+            self.entry.bind('<Command-c>', self.disable_copy_paste)
+            self.entry.bind('<Command-v>', self.disable_copy_paste)
+
     def start_typing_test(self):
         self.start_time = datetime.now()
         self.start_button["state"] = tk.DISABLED
@@ -49,6 +56,9 @@ class TypingSpeedTestApp:
         self.start_button["state"] = tk.NORMAL
         self.entry.unbind("<Return>")
         self.current_input.set("")
+
+    def disable_copy_paste(self, event):
+        return 'break'
 
 
 def main():
